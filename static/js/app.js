@@ -3,6 +3,78 @@
 (function () {
     "use strict";
 
+    // --- Analytics Helpers ---
+    function trackEvent(name, params) {
+        if (typeof gtag === "function") {
+            gtag("event", name, params || {});
+        }
+    }
+
+    function setUserProperties(props) {
+        if (typeof gtag === "function") {
+            gtag("set", "user_properties", props);
+        }
+    }
+
+    // --- Return Visit & User Properties ---
+    let visitCount = parseInt(localStorage.getItem("ic_visit_count") || "0", 10) + 1;
+    localStorage.setItem("ic_visit_count", visitCount);
+
+    const now = new Date().toISOString();
+    const lastVisit = localStorage.getItem("ic_last_visit");
+    const firstVisit = localStorage.getItem("ic_first_visit") || now;
+    localStorage.setItem("ic_first_visit", firstVisit);
+
+    let lifetimeConversions = parseInt(localStorage.getItem("ic_lifetime_conversions") || "0", 10);
+    let preferredScript = localStorage.getItem("ic_preferred_script") || "";
+    const scriptCounts = JSON.parse(localStorage.getItem("ic_script_counts") || "{}");
+
+    if (visitCount > 1 && lastVisit) {
+        const daysSinceLast = Math.round((Date.now() - new Date(lastVisit).getTime()) / 86400000);
+        trackEvent("return_visit", { visit_count: visitCount, days_since_last: daysSinceLast });
+    }
+
+    localStorage.setItem("ic_last_visit", now);
+
+    setUserProperties({
+        first_visit_date: firstVisit.slice(0, 10),
+        total_lifetime_conversions: lifetimeConversions,
+        preferred_script: preferredScript
+    });
+
+    // --- Session State ---
+    let sessionConversions = 0;
+    const sessionStart = Date.now();
+    let lastError = null;
+
+    window.addEventListener("beforeunload", function () {
+        if (sessionConversions > 0) {
+            trackEvent("session_conversions", {
+                total_conversions: sessionConversions,
+                session_duration_s: Math.round((Date.now() - sessionStart) / 1000)
+            });
+        }
+    });
+
+    // --- Scroll Depth Tracking ---
+    const scrollThresholds = [25, 50, 75, 100];
+    const scrollFired = {};
+
+    function checkScrollDepth() {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        if (docHeight <= 0) return;
+        const pct = Math.round((scrollTop / docHeight) * 100);
+        for (const threshold of scrollThresholds) {
+            if (pct >= threshold && !scrollFired[threshold]) {
+                scrollFired[threshold] = true;
+                trackEvent("scroll_depth", { depth: threshold });
+            }
+        }
+    }
+
+    window.addEventListener("scroll", checkScrollDepth, { passive: true });
+
     // --- Hero Animation ---
     const HERO_PHRASES = [
         // Pass 1: "Perfectly converted" in each language
@@ -43,6 +115,7 @@
             heroText.textContent = HERO_PHRASES[heroIndex].text;
             heroText.classList.remove("fade-out");
             heroText.classList.add("visible");
+            trackEvent("hero_cycle", { phrase_index: heroIndex, language: HERO_PHRASES[heroIndex].lang });
             heroIndex = (heroIndex + 1) % HERO_PHRASES.length;
         }, 600);
 
@@ -71,9 +144,24 @@
 
     dropzone.addEventListener("click", () => fileInput.click());
 
+    // Dropzone hover tracking (debounced)
+    let hoverFired = false;
+    dropzone.addEventListener("mouseenter", () => {
+        if (!hoverFired) {
+            hoverFired = true;
+            trackEvent("dropzone_hover");
+        }
+    });
+
+    // Dropzone drag tracking (debounced)
+    let dragFired = false;
     dropzone.addEventListener("dragover", (e) => {
         e.preventDefault();
         dropzone.classList.add("drag-over");
+        if (!dragFired) {
+            dragFired = true;
+            trackEvent("dropzone_drag");
+        }
     });
 
     dropzone.addEventListener("dragleave", () => {
@@ -92,8 +180,16 @@
     });
 
     // --- Convert Another / Retry ---
-    document.getElementById("convertAnother").addEventListener("click", resetUI);
-    document.getElementById("errorRetry").addEventListener("click", resetUI);
+    document.getElementById("convertAnother").addEventListener("click", function () {
+        trackEvent("convert_another_clicked", { session_count: sessionConversions });
+        resetUI();
+    });
+    document.getElementById("errorRetry").addEventListener("click", function () {
+        if (lastError) {
+            trackEvent("error_recovery", { previous_error: lastError });
+        }
+        resetUI();
+    });
 
     function resetUI() {
         progressSection.classList.add("hidden");
@@ -110,6 +206,10 @@
         document.getElementById("downloadBtn").classList.add("hidden");
         document.getElementById("deletedMsg").classList.add("hidden");
         document.getElementById("convertAnother").classList.add("hidden");
+
+        // Reset debounce flags for dropzone tracking
+        hoverFired = false;
+        dragFired = false;
     }
 
     function resetStep(id, label) {
@@ -162,17 +262,20 @@
         progressSection.classList.add("hidden");
         errorCard.classList.remove("hidden");
         errorMsg.textContent = message;
-        trackEvent("conversion_error", { error_type: message.substring(0, 50) });
+        lastError = message.substring(0, 50);
+        trackEvent("conversion_error", { error_type: lastError });
     }
 
     // --- File Handling ---
     async function handleFile(file) {
         // Validate
         if (!file.name.toLowerCase().endsWith(".pdf")) {
+            trackEvent("file_rejected", { reason: "wrong_type" });
             showError("Please select a PDF file.");
             return;
         }
         if (file.size > 20 * 1024 * 1024) {
+            trackEvent("file_rejected", { reason: "too_large" });
             showError("File size exceeds 20MB limit.");
             return;
         }
@@ -217,6 +320,20 @@
             completeStep("stepDetect", `${detection.sample} ${langStr} detected`);
             addSublabel("stepDetect", `Script: ${detection.script}${detection.is_mixed ? " (mixed document)" : ""}`);
             trackEvent("language_detected", { script: detection.script });
+
+            // Update preferred script tracking
+            scriptCounts[detection.script] = (scriptCounts[detection.script] || 0) + 1;
+            localStorage.setItem("ic_script_counts", JSON.stringify(scriptCounts));
+            // Find most-used script
+            let maxCount = 0;
+            for (const s in scriptCounts) {
+                if (scriptCounts[s] > maxCount) {
+                    maxCount = scriptCounts[s];
+                    preferredScript = s;
+                }
+            }
+            localStorage.setItem("ic_preferred_script", preferredScript);
+            setUserProperties({ preferred_script: preferredScript });
         } else {
             completeStep("stepDetect", "No Indian script detected");
             addSublabel("stepDetect", "Converting as-is");
@@ -236,6 +353,12 @@
         const duration = Math.round((Date.now() - convertStart) / 1000);
         completeStep("stepConvert", `Converted in ${duration}s`);
         trackEvent("conversion_completed", { status: "success", duration_bucket: duration < 10 ? "fast" : duration < 30 ? "medium" : "slow" });
+
+        // Update conversion counters
+        sessionConversions++;
+        lifetimeConversions++;
+        localStorage.setItem("ic_lifetime_conversions", lifetimeConversions);
+        setUserProperties({ total_lifetime_conversions: lifetimeConversions });
 
         // Step 4: Download ready
         const step = document.getElementById("stepDownload");
@@ -302,12 +425,5 @@
             throw new Error(data.detail || "Conversion failed.");
         }
         return resp.json();
-    }
-
-    // --- Analytics (GA4 stub) ---
-    function trackEvent(name, params) {
-        if (typeof gtag === "function") {
-            gtag("event", name, params || {});
-        }
     }
 })();
