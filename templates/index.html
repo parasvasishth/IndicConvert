@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IndicConvert — Indian Language PDF to Word</title>
-<meta name="description" content="The only PDF to Word converter that perfectly preserves Punjabi, Hindi, Tamil, Bengali and 6 more Indian scripts.">
+<title>IndicConvert — Convert Indian Language PDFs to Editable Word Documents</title>
+<meta name="description" content="Free PDF to Word converter for Hindi, Punjabi, Tamil, Bengali, Telugu, Kannada, Malayalam, Gujarati, and Odia. Preserves every character — no sign-up required.">
 <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/static/css/style.css">
@@ -22,8 +22,21 @@
 <nav>
   <div class="logo"><div class="mark">IC</div>IndicConvert</div>
   <div class="nav-r">
-    <a class="gh-link" href="https://github.com/parasvasishth/IndicConvert" target="_blank" rel="noopener">⭐ GitHub</a>
-    <button class="lang-btn">🌐 हिन्दी ▾</button>
+    <div class="lang-picker" id="langPicker">
+      <button class="lang-btn" id="langToggle">🌐 English ▾</button>
+      <ul class="lang-menu hidden" id="langMenu">
+        <li data-lang="en">English</li>
+        <li data-lang="pa">ਪੰਜਾਬੀ (Punjabi)</li>
+        <li data-lang="hi">हिन्दी (Hindi)</li>
+        <li data-lang="bn">বাংলা (Bengali)</li>
+        <li data-lang="ta">தமிழ் (Tamil)</li>
+        <li data-lang="te">తెలుగు (Telugu)</li>
+        <li data-lang="kn">ಕನ್ನಡ (Kannada)</li>
+        <li data-lang="ml">മലയാളം (Malayalam)</li>
+        <li data-lang="gu">ગુજરાતી (Gujarati)</li>
+        <li data-lang="or">ଓଡ଼ିଆ (Odia)</li>
+      </ul>
+    </div>
   </div>
 </nav>
 
@@ -69,14 +82,13 @@
         <div class="lang-item">Odia · ଓଡ଼ିଆ</div>
       </div>
 
-      <h1><span class="highlight">PDF दें, Word लें।</span></h1>
-      <p>कोई भी भारतीय भाषा की PDF डालें — <strong>Word अपने-आप बन जाएगा।</strong><br>कोई साइन-अप नहीं। कोई पैसे नहीं। कोई डेटा नहीं रखते।</p>
+      <h1><span class="highlight" data-i18n-html="hero_h1">Drop a PDF, get a Word doc.</span></h1>
+      <p data-i18n-html="hero_p">Upload any Indian language PDF — <strong>we'll convert it to an editable Word document.</strong><br>No sign-up. No cost. Your files, then gone.</p>
     </div>
 
     <div class="trust-strip">
-      <div class="ts green">🔒 फ़ाइल ऑटो-डिलीट</div>
-      <div class="ts blue">📖 ओपन सोर्स</div>
-      <div class="ts orange">⚡ मुफ़्त · कोई साइन-अप नहीं</div>
+      <div class="ts green" data-i18n="trust_1">🔒 Files auto-deleted</div>
+      <div class="ts orange" data-i18n="trust_2">⚡ Free · No sign-up needed</div>
     </div>
   </div>
 </section>
@@ -94,10 +106,10 @@
         <div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div>
       </div>
     </div>
-    <h2>अपनी PDF फ़ाइल यहाँ डालें</h2>
-    <div class="hint">फ़ाइल खींचकर लाएँ या बटन दबाएँ</div>
-    <button class="upload-btn" type="button" id="browseBtn">फ़ाइल चुनें 📄</button>
-    <div class="upload-note">अधिकतम 20MB · भाषा अपने-आप पहचानी जाएगी</div>
+    <h2 data-i18n="upload_h2">Drop your PDF file here</h2>
+    <div class="hint" data-i18n="upload_hint">Drag and drop or click the button</div>
+    <button class="upload-btn" type="button" id="browseBtn" data-i18n="upload_btn">Choose file 📄</button>
+    <div class="upload-note" data-i18n="upload_note">Up to 20 MB · Language detected automatically</div>
     <input type="file" id="fileInput" accept=".pdf,application/pdf" hidden>
   </div>
 </section>
@@ -111,7 +123,7 @@
         <svg class="check-icon hidden" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
       </div>
       <div class="step-content">
-        <p class="step-label">अपलोड हो रहा है...</p>
+        <p class="step-label" data-i18n="uploading">Uploading...</p>
         <div class="progress-bar"><div class="progress-fill" id="uploadProgress"></div></div>
       </div>
     </div>
@@ -123,7 +135,7 @@
         <div class="step-dot"></div>
       </div>
       <div class="step-content">
-        <p class="step-label">भाषा पहचान हो रही है...</p>
+        <p class="step-label" data-i18n="detecting">Detecting language...</p>
       </div>
     </div>
 
@@ -134,7 +146,7 @@
         <div class="step-dot"></div>
       </div>
       <div class="step-content">
-        <p class="step-label">कन्वर्ट हो रहा है...</p>
+        <p class="step-label" data-i18n="converting">Converting...</p>
       </div>
     </div>
 
@@ -150,7 +162,7 @@
             <polyline points="7 10 12 15 17 10"/>
             <line x1="12" y1="15" x2="12" y2="3"/>
           </svg>
-          Word डाउनलोड करें
+          <span data-i18n="download_btn">Download Word Document</span>
         </a>
       </div>
     </div>
@@ -158,26 +170,26 @@
 
   <p class="deleted-msg hidden" id="deletedMsg">
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-    फ़ाइल सर्वर से हमेशा के लिए मिटा दी गई
+    <span data-i18n="deleted_msg">Your file has been removed from our servers</span>
   </p>
-  <button class="convert-another hidden" id="convertAnother">एक और फ़ाइल कन्वर्ट करें</button>
+  <button class="convert-another hidden" id="convertAnother" data-i18n="convert_another">Convert another file</button>
 </section>
 
 <!-- Error -->
 <div class="error-card hidden" id="errorCard">
   <p class="error-msg" id="errorMsg"></p>
-  <button class="convert-another" id="errorRetry">फिर से कोशिश करें</button>
+  <button class="convert-another" id="errorRetry" data-i18n="try_again">Try again</button>
 </div>
 
 <!-- Steps Section -->
 <section class="steps-section">
-  <h2>बस <span>तीन कदम</span> — और हो गया! 🎉</h2>
+  <h2 data-i18n-html="steps_h2">Just <span>three steps</span> — and you're done! 🎉</h2>
   <div class="steps-visual">
-    <div class="vstep"><div class="vstep-bubble"><div class="badge">1</div>📤</div><h3>PDF डालें</h3><p>फ़ाइल खींचें या बटन दबाएँ</p></div>
+    <div class="vstep"><div class="vstep-bubble"><div class="badge">1</div>📤</div><h3 data-i18n="step1_h3">Upload PDF</h3><p data-i18n="step1_p">Drag and drop or click to browse</p></div>
     <div class="step-conn"><div class="dots"><div class="d"></div><div class="d"></div><div class="d"></div></div></div>
-    <div class="vstep"><div class="vstep-bubble"><div class="badge">2</div>🔍</div><h3>भाषा पहचान</h3><p>अपने-आप, बिना कुछ किए</p></div>
+    <div class="vstep"><div class="vstep-bubble"><div class="badge">2</div>🔍</div><h3 data-i18n="step2_h3">Language detected</h3><p data-i18n="step2_p">Automatically, no setup needed</p></div>
     <div class="step-conn"><div class="dots"><div class="d"></div><div class="d"></div><div class="d"></div></div></div>
-    <div class="vstep"><div class="vstep-bubble"><div class="badge">3</div>📥</div><h3>Word डाउनलोड</h3><p>एक क्लिक — फ़ाइल तैयार!</p></div>
+    <div class="vstep"><div class="vstep-bubble"><div class="badge">3</div>📥</div><h3 data-i18n="step3_h3">Download Word</h3><p data-i18n="step3_p">One click — your file is ready!</p></div>
   </div>
 </section>
 
@@ -189,47 +201,29 @@
       <div class="sec-ring sr2"></div>
       <div class="sec-ring sr3"></div>
       <div class="sec-center">🛡️</div>
-      <div class="trust-float tf1">🔒 एन्क्रिप्टेड</div>
-      <div class="trust-float tf2">🗑️ ऑटो-डिलीट</div>
-      <div class="trust-float tf3">🚫 नो ट्रैकिंग</div>
+      <div class="trust-float tf1" data-i18n="sec_tf1">🔒 Encrypted</div>
+      <div class="trust-float tf2" data-i18n="sec_tf2">🗑️ Auto-delete</div>
+      <div class="trust-float tf3" data-i18n="sec_tf3">🚫 No tracking</div>
     </div>
     <div class="sec-text">
-      <h2>आपका डेटा<br><span>हमारे पास नहीं रहता।</span></h2>
-      <p class="desc">फ़ाइल अपलोड होते ही मेमोरी में प्रोसेस होती है। डाउनलोड करते ही हमेशा के लिए मिट जाती है। कहीं कोई कॉपी नहीं बचती।</p>
+      <h2 data-i18n-html="sec_h2">Your data<br><span>doesn't stay with us.</span></h2>
+      <p class="desc" data-i18n="sec_desc">Files are processed in memory the moment they're uploaded. Once you download, they're gone forever. No copies anywhere.</p>
       <div class="sec-features">
-        <div class="sf"><div class="check">✓</div>कोई अकाउंट नहीं चाहिए</div>
-        <div class="sf"><div class="check">✓</div>फ़ाइल कभी सेव नहीं होती</div>
-        <div class="sf"><div class="check">✓</div>कोई ट्रैकिंग या कुकीज़ नहीं</div>
-        <div class="sf"><div class="check">✓</div>पूरा कोड ओपन सोर्स — देख सकते हैं</div>
+        <div class="sf"><div class="check">✓</div><span data-i18n="sec_f1">No account needed</span></div>
+        <div class="sf"><div class="check">✓</div><span data-i18n="sec_f2">Files are never saved</span></div>
+        <div class="sf"><div class="check">✓</div><span data-i18n="sec_f3">No tracking or cookies</span></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Feedback Section -->
-<section class="fb-section">
-  <div class="fb-container">
-    <h2>कुछ कहना चाहते हैं? 💬</h2>
-    <div class="sub">आपकी राय से ही ये टूल बेहतर बनता है!</div>
-    <div class="fb-cards">
-      <div class="fbc issue">
-        <div class="icon">😟</div>
-        <h3>कुछ गलत हो रहा?</h3>
-        <p>फ़ाइल कन्वर्ट नहीं हुई? कोई एरर आया? हमें बताएं — जल्दी ठीक करेंगे।</p>
-        <a href="https://github.com/parasvasishth/IndicConvert/issues/new?labels=bug" target="_blank" rel="noopener">समस्या बताएं →</a>
-      </div>
-      <div class="fbc feature">
-        <div class="icon">💡</div>
-        <h3>कोई आइडिया है?</h3>
-        <p>नई भाषा, नया फ़ीचर, या कोई सुझाव? आपका आइडिया हमारा अगला अपडेट बन सकता है।</p>
-        <a href="https://github.com/parasvasishth/IndicConvert/issues/new?labels=enhancement" target="_blank" rel="noopener">सुझाव दें →</a>
-      </div>
-    </div>
-  </div>
-</section>
+<footer>
+  <span>IndicConvert · </span>
+  <span data-i18n="footer_privacy">Your files, then gone</span>
+  <span> · Made with ❤️ in India by <a href="https://sumfactor.in/" target="_blank" rel="noopener">Sumfactor</a></span>
+</footer>
 
-<footer>IndicConvert · ओपन सोर्स · कोई डेटा नहीं · भारत में बनाया 🇮🇳 · <a href="https://github.com/parasvasishth/IndicConvert" target="_blank" rel="noopener">GitHub</a></footer>
-
+<script src="/static/js/i18n.js"></script>
 <script src="/static/js/app.js"></script>
 </body>
 </html>

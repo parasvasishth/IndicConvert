@@ -3,6 +3,9 @@
 (function () {
     "use strict";
 
+    var i18n = window.IC_I18N;
+    function t(key) { return i18n.t(key); }
+
     // ─── Analytics Helpers ───
     function trackEvent(name, params) {
         if (typeof gtag === "function") {
@@ -192,9 +195,9 @@
         uploadSection.classList.remove("hidden");
         fileInput.value = "";
 
-        resetStep("stepUpload", "अपलोड हो रहा है...");
-        resetStep("stepDetect", "भाषा पहचान हो रही है...");
-        resetStep("stepConvert", "कन्वर्ट हो रहा है...");
+        resetStep("stepUpload", t("uploading"));
+        resetStep("stepDetect", t("detecting"));
+        resetStep("stepConvert", t("converting"));
         resetStep("stepDownload", "");
         document.getElementById("uploadProgress").style.width = "0%";
         document.getElementById("downloadBtn").classList.add("hidden");
@@ -264,12 +267,12 @@
         // Validate
         if (!file.name.toLowerCase().endsWith(".pdf")) {
             trackEvent("file_rejected", { reason: "wrong_type" });
-            showError("कृपया एक PDF फ़ाइल चुनें।");
+            showError(t("err_not_pdf"));
             return;
         }
         if (file.size > 20 * 1024 * 1024) {
             trackEvent("file_rejected", { reason: "too_large" });
-            showError("फ़ाइल 20MB से बड़ी है।");
+            showError(t("err_too_large"));
             return;
         }
 
@@ -288,23 +291,23 @@
         formData.append("file", file);
 
         uploadFile(formData).then(function (uploadResult) {
-            completeStep("stepUpload", "अपलोड हो गया");
+            completeStep("stepUpload", t("uploaded"));
 
             // Step 2: Detection result
             activateStep("stepDetect");
             var detection = uploadResult.detection;
 
             if (detection.is_scanned) {
-                completeStep("stepDetect", "स्कैन किया हुआ डॉक्यूमेंट");
-                showError("ये एक स्कैन की हुई PDF लगती है। अभी सिर्फ़ टेक्स्ट-बेस्ड PDF सपोर्ट है।");
+                completeStep("stepDetect", t("scanned_detected"));
+                showError(t("err_scanned"));
                 trackEvent("conversion_error", { error_type: "scanned_pdf" });
                 return;
             }
 
             if (detection.script) {
                 var langStr = detection.languages.join(", ");
-                completeStep("stepDetect", detection.sample + " " + langStr + " पहचानी गई");
-                addSublabel("stepDetect", "स्क्रिप्ट: " + detection.script + (detection.is_mixed ? " (मिक्स्ड डॉक्यूमेंट)" : ""));
+                completeStep("stepDetect", detection.sample + " " + langStr + " " + t("detected_suffix"));
+                addSublabel("stepDetect", t("script_prefix") + detection.script + (detection.is_mixed ? t("mixed_doc") : ""));
                 trackEvent("language_detected", { script: detection.script });
 
                 scriptCounts[detection.script] = (scriptCounts[detection.script] || 0) + 1;
@@ -319,8 +322,8 @@
                 localStorage.setItem("ic_preferred_script", preferredScript);
                 setUserProperties({ preferred_script: preferredScript });
             } else {
-                completeStep("stepDetect", "कोई भारतीय स्क्रिप्ट नहीं मिली");
-                addSublabel("stepDetect", "जैसा है वैसे कन्वर्ट करेंगे");
+                completeStep("stepDetect", t("no_script"));
+                addSublabel("stepDetect", t("as_is"));
             }
 
             // Step 3: Convert
@@ -329,7 +332,7 @@
 
             return convertFile(uploadResult.job_id).then(function () {
                 var duration = Math.round((Date.now() - convertStart) / 1000);
-                completeStep("stepConvert", duration + " सेकंड में कन्वर्ट हुआ");
+                completeStep("stepConvert", t("converted_in_prefix") + duration + t("converted_in_suffix"));
                 trackEvent("conversion_completed", { status: "success", duration_bucket: duration < 10 ? "fast" : duration < 30 ? "medium" : "slow" });
 
                 sessionConversions++;
@@ -360,7 +363,7 @@
                 });
             });
         }).catch(function (err) {
-            showError(err.message || "कुछ गलत हो गया। कृपया फिर से कोशिश करें।");
+            showError(err.message || t("err_generic"));
         });
     }
 
@@ -384,15 +387,15 @@
                 } else {
                     try {
                         var err = JSON.parse(xhr.responseText);
-                        reject(new Error(err.detail || "अपलोड नहीं हो पाया।"));
+                        reject(new Error(err.detail || t("err_upload")));
                     } catch (e) {
-                        reject(new Error("अपलोड नहीं हो पाया।"));
+                        reject(new Error(t("err_upload")));
                     }
                 }
             });
 
             xhr.addEventListener("error", function () {
-                reject(new Error("नेटवर्क एरर — कृपया इंटरनेट चेक करें।"));
+                reject(new Error(t("err_network")));
             });
 
             xhr.send(formData);
@@ -403,10 +406,41 @@
         return fetch("/api/convert/" + jobId, { method: "POST" }).then(function (resp) {
             if (!resp.ok) {
                 return resp.json().catch(function () { return {}; }).then(function (data) {
-                    throw new Error(data.detail || "कन्वर्ट नहीं हो पाया।");
+                    throw new Error(data.detail || t("err_convert"));
                 });
             }
             return resp.json();
         });
     }
+
+    // ─── Language Picker ───
+    var langToggle = document.getElementById("langToggle");
+    var langMenu = document.getElementById("langMenu");
+
+    if (langToggle && langMenu) {
+        langToggle.addEventListener("click", function (e) {
+            e.stopPropagation();
+            langMenu.classList.toggle("hidden");
+        });
+
+        langMenu.addEventListener("click", function (e) {
+            var li = e.target.closest("[data-lang]");
+            if (li) {
+                var lang = li.getAttribute("data-lang");
+                i18n.setLanguage(lang);
+                langToggle.textContent = "🌐 " + i18n.LANG_NAMES[lang] + " ▾";
+                langMenu.classList.add("hidden");
+                trackEvent("language_changed", { language: lang });
+            }
+        });
+
+        document.addEventListener("click", function () {
+            langMenu.classList.add("hidden");
+        });
+    }
+
+    // ─── Auto-detect and apply language ───
+    var detectedLang = i18n.detectLanguage();
+    i18n.setLanguage(detectedLang);
+    langToggle.textContent = "🌐 " + i18n.LANG_NAMES[detectedLang] + " ▾";
 })();

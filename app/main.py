@@ -54,19 +54,19 @@ async def index(request: Request):
 async def upload_pdf(file: UploadFile = File(...)):
     # Validate extension
     if not file.filename or not file.filename.lower().endswith(".pdf"):
-        raise HTTPException(status_code=400, detail="Only PDF files are accepted.")
+        raise HTTPException(status_code=400, detail="Please upload a PDF file.")
 
     # Validate MIME type
     if file.content_type and file.content_type != "application/pdf":
-        raise HTTPException(status_code=400, detail="Only PDF files are accepted.")
+        raise HTTPException(status_code=400, detail="Please upload a PDF file.")
 
     # Read and validate size
     content = await file.read()
     if len(content) > MAX_FILE_SIZE:
-        raise HTTPException(status_code=400, detail="File size exceeds 20MB limit.")
+        raise HTTPException(status_code=400, detail="This file is over 20 MB. Try a smaller PDF.")
 
     if len(content) == 0:
-        raise HTTPException(status_code=400, detail="File is empty.")
+        raise HTTPException(status_code=400, detail="This file appears to be empty.")
 
     # Save to temp directory
     job_id = str(uuid.uuid4())
@@ -120,7 +120,7 @@ async def convert(job_id: str):
         job["status"] = "failed"
         job["error"] = str(e)
         logger.exception("Conversion failed for job %s", job_id)
-        raise HTTPException(status_code=500, detail="Conversion failed unexpectedly.")
+        raise HTTPException(status_code=500, detail="Something went wrong during conversion. Please try again.")
 
 
 @app.get("/api/status/{job_id}")

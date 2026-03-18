@@ -193,6 +193,12 @@ nav{padding:14px 40px;display:flex;justify-content:space-between;align-items:cen
 footer{padding:24px 48px;text-align:center;font-size:12px;color:#C4A87C;border-top:1px solid #F0E8DA}
 footer a{color:#D4652A;text-decoration:none;font-weight:700}
 
+/* ─── Language Picker ─── */
+.lang-picker{position:relative}
+.lang-menu{position:absolute;top:calc(100% + 6px);right:0;background:#FFF;border:1px solid #E8DBC8;border-radius:14px;padding:6px 0;min-width:200px;box-shadow:0 8px 32px rgba(0,0,0,.1);z-index:200;list-style:none}
+.lang-menu li{padding:10px 18px;font-size:14px;font-weight:600;cursor:pointer;transition:all .15s;color:#2D2A26}
+.lang-menu li:hover{background:#FFF8F0;color:#D4652A}
+
 /* ─── Utility ─── */
 .hidden{display:none !important}
 
