@@ -1,145 +1,235 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IndicConvert — Indian Language PDF to Word</title>
-    <meta name="description" content="The only PDF to Word converter that perfectly preserves Punjabi, Hindi, Tamil, Bengali and 6 more Indian scripts.">
-    <link rel="stylesheet" href="/static/css/style.css">
-    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5VHDRJP8QT"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-5VHDRJP8QT');
-    </script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IndicConvert — Indian Language PDF to Word</title>
+<meta name="description" content="The only PDF to Word converter that perfectly preserves Punjabi, Hindi, Tamil, Bengali and 6 more Indian scripts.">
+<link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/style.css">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5VHDRJP8QT"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-5VHDRJP8QT');
+</script>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar">
-        <a href="/" class="navbar-brand">
-            <div class="brand-icon">IC</div>
-            <div class="brand-name">Indic<span>Convert</span></div>
+
+<nav>
+  <div class="logo"><div class="mark">IC</div>IndicConvert</div>
+  <div class="nav-r">
+    <a class="gh-link" href="https://github.com/parasvasishth/IndicConvert" target="_blank" rel="noopener">⭐ GitHub</a>
+    <button class="lang-btn">🌐 हिन्दी ▾</button>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+
+  <div class="hero-content">
+    <!-- Emoji circle -->
+    <div class="char-container">
+      <div class="char-ring">
+        <div class="ring-dot"></div><div class="ring-dot"></div>
+        <div class="ring-dot"></div><div class="ring-dot"></div>
+      </div>
+      <div class="char-emoji" id="greetEmoji">🙏</div>
+    </div>
+
+    <!-- Speech bubble with animated greeting -->
+    <div class="speech">
+      <div class="greeting-line" id="greetingBox">
+        <div class="greet-item active">नमस्ते!</div>
+        <div class="greet-item">Hello!</div>
+        <div class="greet-item">ਸਤ ਸ੍ਰੀ ਅਕਾਲ!</div>
+        <div class="greet-item">নমস্কার!</div>
+        <div class="greet-item">வணக்கம்!</div>
+        <div class="greet-item">నమస్కారం!</div>
+        <div class="greet-item">ನಮಸ್ಕಾರ!</div>
+        <div class="greet-item">നമസ്കാരം!</div>
+        <div class="greet-item">નમસ્તે!</div>
+        <div class="greet-item">ନମସ୍କାର!</div>
+      </div>
+      <div class="lang-label" id="langLabel">
+        <div class="lang-item active">Hindi · हिन्दी</div>
+        <div class="lang-item">English</div>
+        <div class="lang-item">Punjabi · ਪੰਜਾਬੀ</div>
+        <div class="lang-item">Bengali · বাংলা</div>
+        <div class="lang-item">Tamil · தமிழ்</div>
+        <div class="lang-item">Telugu · తెలుగు</div>
+        <div class="lang-item">Kannada · ಕನ್ನಡ</div>
+        <div class="lang-item">Malayalam · മലയാളം</div>
+        <div class="lang-item">Gujarati · ગુજરાતી</div>
+        <div class="lang-item">Odia · ଓଡ଼ିଆ</div>
+      </div>
+
+      <h1><span class="highlight">PDF दें, Word लें।</span></h1>
+      <p>कोई भी भारतीय भाषा की PDF डालें — <strong>Word अपने-आप बन जाएगा।</strong><br>कोई साइन-अप नहीं। कोई पैसे नहीं। कोई डेटा नहीं रखते।</p>
+    </div>
+
+    <div class="trust-strip">
+      <div class="ts green">🔒 फ़ाइल ऑटो-डिलीट</div>
+      <div class="ts blue">📖 ओपन सोर्स</div>
+      <div class="ts orange">⚡ मुफ़्त · कोई साइन-अप नहीं</div>
+    </div>
+  </div>
+</section>
+
+<!-- Upload Card -->
+<section class="upload-section" id="uploadSection">
+  <div class="upload-card" id="dropzone">
+    <div class="sparkle sp1">✨</div>
+    <div class="sparkle sp2">✨</div>
+    <div class="sparkle sp3">⭐</div>
+    <div class="sparkle sp4">✨</div>
+    <div class="doc-illus">
+      <div class="doc-arrow"></div>
+      <div class="doc-page">
+        <div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div>
+      </div>
+    </div>
+    <h2>अपनी PDF फ़ाइल यहाँ डालें</h2>
+    <div class="hint">फ़ाइल खींचकर लाएँ या बटन दबाएँ</div>
+    <button class="upload-btn" type="button" id="browseBtn">फ़ाइल चुनें 📄</button>
+    <div class="upload-note">अधिकतम 20MB · भाषा अपने-आप पहचानी जाएगी</div>
+    <input type="file" id="fileInput" accept=".pdf,application/pdf" hidden>
+  </div>
+</section>
+
+<!-- Progress Section -->
+<section class="progress-section hidden" id="progressSection">
+  <div class="progress-card">
+    <div class="step" id="stepUpload">
+      <div class="step-indicator">
+        <div class="spinner"></div>
+        <svg class="check-icon hidden" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div class="step-content">
+        <p class="step-label">अपलोड हो रहा है...</p>
+        <div class="progress-bar"><div class="progress-fill" id="uploadProgress"></div></div>
+      </div>
+    </div>
+
+    <div class="step inactive" id="stepDetect">
+      <div class="step-indicator">
+        <div class="spinner hidden"></div>
+        <svg class="check-icon hidden" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        <div class="step-dot"></div>
+      </div>
+      <div class="step-content">
+        <p class="step-label">भाषा पहचान हो रही है...</p>
+      </div>
+    </div>
+
+    <div class="step inactive" id="stepConvert">
+      <div class="step-indicator">
+        <div class="spinner hidden"></div>
+        <svg class="check-icon hidden" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        <div class="step-dot"></div>
+      </div>
+      <div class="step-content">
+        <p class="step-label">कन्वर्ट हो रहा है...</p>
+      </div>
+    </div>
+
+    <div class="step inactive" id="stepDownload">
+      <div class="step-indicator">
+        <svg class="check-icon hidden" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        <div class="step-dot"></div>
+      </div>
+      <div class="step-content">
+        <a class="download-btn hidden" id="downloadBtn" href="#">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Word डाउनलोड करें
         </a>
-        <div class="navbar-badge">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            Zero data stored
-        </div>
-    </nav>
+      </div>
+    </div>
+  </div>
 
-    <main>
-        <!-- Hero -->
-        <section class="hero" id="hero">
-            <div class="hero-text" id="heroText" aria-live="polite"></div>
-            <p class="hero-subtitle">The only PDF to Word converter that actually works for Indian languages</p>
-        </section>
+  <p class="deleted-msg hidden" id="deletedMsg">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    फ़ाइल सर्वर से हमेशा के लिए मिटा दी गई
+  </p>
+  <button class="convert-another hidden" id="convertAnother">एक और फ़ाइल कन्वर्ट करें</button>
+</section>
 
-        <!-- Upload -->
-        <section class="upload-section" id="uploadSection">
-            <div class="dropzone" id="dropzone">
-                <div class="dropzone-content">
-                    <svg class="dropzone-icon" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                        <polyline points="17 8 12 3 7 8"/>
-                        <line x1="12" y1="3" x2="12" y2="15"/>
-                    </svg>
-                    <p class="dropzone-text">Drop your PDF here</p>
-                    <p class="dropzone-hint">or <button type="button" class="link-btn" id="browseBtn">browse files</button> &middot; Max 20 MB</p>
-                </div>
-                <input type="file" id="fileInput" accept=".pdf,application/pdf" hidden>
-            </div>
-        </section>
+<!-- Error -->
+<div class="error-card hidden" id="errorCard">
+  <p class="error-msg" id="errorMsg"></p>
+  <button class="convert-another" id="errorRetry">फिर से कोशिश करें</button>
+</div>
 
-        <!-- Progress -->
-        <section class="progress-section hidden" id="progressSection">
-            <div class="progress-card">
-                <div class="step" id="stepUpload">
-                    <div class="step-indicator">
-                        <div class="spinner"></div>
-                        <svg class="check-icon hidden" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                    </div>
-                    <div class="step-content">
-                        <p class="step-label">Uploading...</p>
-                        <div class="progress-bar"><div class="progress-fill" id="uploadProgress"></div></div>
-                    </div>
-                </div>
+<!-- Steps Section -->
+<section class="steps-section">
+  <h2>बस <span>तीन कदम</span> — और हो गया! 🎉</h2>
+  <div class="steps-visual">
+    <div class="vstep"><div class="vstep-bubble"><div class="badge">1</div>📤</div><h3>PDF डालें</h3><p>फ़ाइल खींचें या बटन दबाएँ</p></div>
+    <div class="step-conn"><div class="dots"><div class="d"></div><div class="d"></div><div class="d"></div></div></div>
+    <div class="vstep"><div class="vstep-bubble"><div class="badge">2</div>🔍</div><h3>भाषा पहचान</h3><p>अपने-आप, बिना कुछ किए</p></div>
+    <div class="step-conn"><div class="dots"><div class="d"></div><div class="d"></div><div class="d"></div></div></div>
+    <div class="vstep"><div class="vstep-bubble"><div class="badge">3</div>📥</div><h3>Word डाउनलोड</h3><p>एक क्लिक — फ़ाइल तैयार!</p></div>
+  </div>
+</section>
 
-                <div class="step inactive" id="stepDetect">
-                    <div class="step-indicator">
-                        <div class="spinner hidden"></div>
-                        <svg class="check-icon hidden" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                        <div class="step-dot"></div>
-                    </div>
-                    <div class="step-content">
-                        <p class="step-label">Detecting language...</p>
-                    </div>
-                </div>
+<!-- Security Section -->
+<section class="sec-section">
+  <div class="sec-container">
+    <div class="sec-illustration">
+      <div class="sec-ring sr1"></div>
+      <div class="sec-ring sr2"></div>
+      <div class="sec-ring sr3"></div>
+      <div class="sec-center">🛡️</div>
+      <div class="trust-float tf1">🔒 एन्क्रिप्टेड</div>
+      <div class="trust-float tf2">🗑️ ऑटो-डिलीट</div>
+      <div class="trust-float tf3">🚫 नो ट्रैकिंग</div>
+    </div>
+    <div class="sec-text">
+      <h2>आपका डेटा<br><span>हमारे पास नहीं रहता।</span></h2>
+      <p class="desc">फ़ाइल अपलोड होते ही मेमोरी में प्रोसेस होती है। डाउनलोड करते ही हमेशा के लिए मिट जाती है। कहीं कोई कॉपी नहीं बचती।</p>
+      <div class="sec-features">
+        <div class="sf"><div class="check">✓</div>कोई अकाउंट नहीं चाहिए</div>
+        <div class="sf"><div class="check">✓</div>फ़ाइल कभी सेव नहीं होती</div>
+        <div class="sf"><div class="check">✓</div>कोई ट्रैकिंग या कुकीज़ नहीं</div>
+        <div class="sf"><div class="check">✓</div>पूरा कोड ओपन सोर्स — देख सकते हैं</div>
+      </div>
+    </div>
+  </div>
+</section>
 
-                <div class="step inactive" id="stepConvert">
-                    <div class="step-indicator">
-                        <div class="spinner hidden"></div>
-                        <svg class="check-icon hidden" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                        <div class="step-dot"></div>
-                    </div>
-                    <div class="step-content">
-                        <p class="step-label">Converting...</p>
-                    </div>
-                </div>
+<!-- Feedback Section -->
+<section class="fb-section">
+  <div class="fb-container">
+    <h2>कुछ कहना चाहते हैं? 💬</h2>
+    <div class="sub">आपकी राय से ही ये टूल बेहतर बनता है!</div>
+    <div class="fb-cards">
+      <div class="fbc issue">
+        <div class="icon">😟</div>
+        <h3>कुछ गलत हो रहा?</h3>
+        <p>फ़ाइल कन्वर्ट नहीं हुई? कोई एरर आया? हमें बताएं — जल्दी ठीक करेंगे।</p>
+        <a href="https://github.com/parasvasishth/IndicConvert/issues/new?labels=bug" target="_blank" rel="noopener">समस्या बताएं →</a>
+      </div>
+      <div class="fbc feature">
+        <div class="icon">💡</div>
+        <h3>कोई आइडिया है?</h3>
+        <p>नई भाषा, नया फ़ीचर, या कोई सुझाव? आपका आइडिया हमारा अगला अपडेट बन सकता है।</p>
+        <a href="https://github.com/parasvasishth/IndicConvert/issues/new?labels=enhancement" target="_blank" rel="noopener">सुझाव दें →</a>
+      </div>
+    </div>
+  </div>
+</section>
 
-                <div class="step inactive" id="stepDownload">
-                    <div class="step-indicator">
-                        <svg class="check-icon hidden" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                        <div class="step-dot"></div>
-                    </div>
-                    <div class="step-content">
-                        <a class="download-btn hidden" id="downloadBtn" href="#">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                                <polyline points="7 10 12 15 17 10"/>
-                                <line x1="12" y1="15" x2="12" y2="3"/>
-                            </svg>
-                            Download Word Document
-                        </a>
-                    </div>
-                </div>
-            </div>
+<footer>IndicConvert · ओपन सोर्स · कोई डेटा नहीं · भारत में बनाया 🇮🇳 · <a href="https://github.com/parasvasishth/IndicConvert" target="_blank" rel="noopener">GitHub</a></footer>
 
-            <p class="deleted-msg hidden" id="deletedMsg">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                File permanently deleted from our servers
-            </p>
-            <button class="convert-another hidden" id="convertAnother">Convert another file</button>
-        </section>
-
-        <!-- Error -->
-        <div class="error-card hidden" id="errorCard">
-            <p class="error-msg" id="errorMsg"></p>
-            <button class="convert-another" id="errorRetry">Try again</button>
-        </div>
-
-        <!-- Supported Languages -->
-        <section class="languages-section">
-            <h2>Supported Indian Scripts</h2>
-            <div class="languages-grid">
-                <div class="lang-card"><span class="lang-sample">ਪੰਜਾਬੀ</span><span class="lang-name">Punjabi</span><span class="lang-script">Gurmukhi</span></div>
-                <div class="lang-card"><span class="lang-sample">हिन्दी</span><span class="lang-name">Hindi</span><span class="lang-script">Devanagari</span></div>
-                <div class="lang-card"><span class="lang-sample">বাংলা</span><span class="lang-name">Bengali</span><span class="lang-script">Bengali</span></div>
-                <div class="lang-card"><span class="lang-sample">தமிழ்</span><span class="lang-name">Tamil</span><span class="lang-script">Tamil</span></div>
-                <div class="lang-card"><span class="lang-sample">తెలుగు</span><span class="lang-name">Telugu</span><span class="lang-script">Telugu</span></div>
-                <div class="lang-card"><span class="lang-sample">ಕನ್ನಡ</span><span class="lang-name">Kannada</span><span class="lang-script">Kannada</span></div>
-                <div class="lang-card"><span class="lang-sample">മലയാളം</span><span class="lang-name">Malayalam</span><span class="lang-script">Malayalam</span></div>
-                <div class="lang-card"><span class="lang-sample">ગુજરાતી</span><span class="lang-name">Gujarati</span><span class="lang-script">Gujarati</span></div>
-                <div class="lang-card"><span class="lang-sample">ଓଡ଼ିଆ</span><span class="lang-name">Odia</span><span class="lang-script">Odia</span></div>
-            </div>
-        </section>
-
-        <footer>
-            <p>IndicConvert &middot; No data stored &middot; <a href="https://github.com/parasvasishth/IndicConvert">Open Source</a></p>
-        </footer>
-    </main>
-
-    <script src="/static/js/app.js"></script>
+<script src="/static/js/app.js"></script>
 </body>
 </html>
